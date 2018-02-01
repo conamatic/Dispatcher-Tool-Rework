@@ -38,6 +38,7 @@
             // 
             // Template_Input
             // 
+            this.Template_Input.BackColor = System.Drawing.SystemColors.Window;
             this.Template_Input.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
             this.Template_Input.Location = new System.Drawing.Point(87, 11);
             this.Template_Input.Name = "Template_Input";
@@ -47,7 +48,7 @@
             // Quantity_Input
             // 
             this.Quantity_Input.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.Quantity_Input.Location = new System.Drawing.Point(87, 48);
+            this.Quantity_Input.Location = new System.Drawing.Point(87, 38);
             this.Quantity_Input.Name = "Quantity_Input";
             this.Quantity_Input.Size = new System.Drawing.Size(232, 21);
             this.Quantity_Input.TabIndex = 1;
@@ -66,7 +67,7 @@
             // 
             this.Quantity.AutoSize = true;
             this.Quantity.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.Quantity.Location = new System.Drawing.Point(15, 51);
+            this.Quantity.Location = new System.Drawing.Point(15, 41);
             this.Quantity.Name = "Quantity";
             this.Quantity.Size = new System.Drawing.Size(51, 15);
             this.Quantity.TabIndex = 3;
@@ -74,7 +75,7 @@
             // 
             // Save_Button
             // 
-            this.Save_Button.Location = new System.Drawing.Point(243, 93);
+            this.Save_Button.Location = new System.Drawing.Point(244, 65);
             this.Save_Button.Name = "Save_Button";
             this.Save_Button.Size = new System.Drawing.Size(75, 23);
             this.Save_Button.TabIndex = 4;
@@ -84,7 +85,7 @@
             // 
             // Cancel_Button
             // 
-            this.Cancel_Button.Location = new System.Drawing.Point(141, 93);
+            this.Cancel_Button.Location = new System.Drawing.Point(142, 65);
             this.Cancel_Button.Name = "Cancel_Button";
             this.Cancel_Button.Size = new System.Drawing.Size(75, 23);
             this.Cancel_Button.TabIndex = 5;
@@ -95,13 +96,15 @@
             // Form2
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
-            this.ClientSize = new System.Drawing.Size(519, 261);
+            this.BackColor = System.Drawing.SystemColors.Window;
+            this.ClientSize = new System.Drawing.Size(354, 108);
             this.Controls.Add(this.Cancel_Button);
             this.Controls.Add(this.Save_Button);
             this.Controls.Add(this.Quantity);
             this.Controls.Add(this.templateLabel);
             this.Controls.Add(this.Quantity_Input);
             this.Controls.Add(this.Template_Input);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Form2";
             this.ResumeLayout(false);
             this.PerformLayout();
