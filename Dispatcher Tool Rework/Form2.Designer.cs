@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form2));
             this.Template_Input = new System.Windows.Forms.TextBox();
             this.Quantity_Input = new System.Windows.Forms.TextBox();
             this.templateLabel = new System.Windows.Forms.Label();
@@ -104,7 +105,8 @@
             this.Controls.Add(this.templateLabel);
             this.Controls.Add(this.Quantity_Input);
             this.Controls.Add(this.Template_Input);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form2";
             this.ResumeLayout(false);
             this.PerformLayout();
