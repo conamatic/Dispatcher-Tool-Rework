@@ -159,7 +159,6 @@ namespace Dispatcher_Tool_Rework
                         }
                     }
 
-
                     form3.Controls.Add(Address);
                     form3.Controls.Add(browser);
                 }
@@ -327,6 +326,12 @@ namespace Dispatcher_Tool_Rework
             {
                 MessageBox.Show(CloseException.Message);
             }
+        }
+
+        private void Main_Form_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Cef.Shutdown();
+            this.Dispose();
         }
     }
 }
