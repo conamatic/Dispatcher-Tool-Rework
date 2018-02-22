@@ -60,9 +60,9 @@
             this.templateLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
             this.templateLabel.Location = new System.Drawing.Point(15, 14);
             this.templateLabel.Name = "templateLabel";
-            this.templateLabel.Size = new System.Drawing.Size(59, 15);
+            this.templateLabel.Size = new System.Drawing.Size(32, 15);
             this.templateLabel.TabIndex = 2;
-            this.templateLabel.Text = "Template";
+            this.templateLabel.Text = "URL";
             // 
             // Quantity
             // 

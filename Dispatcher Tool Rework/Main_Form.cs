@@ -16,6 +16,9 @@ namespace Dispatcher_Tool_Rework
         int counter = 1;
         Form form3;
 
+        int AttemptedRows;
+        int AttemptedCols;
+
         public Main_Form()
         {
             InitializeComponent();
@@ -103,77 +106,69 @@ namespace Dispatcher_Tool_Rework
 
             form3.ContextMenuStrip = menu;
 
-            int cols = 0;
-            int rows = 0;
+            int count = 0;
+            int ScreenH = screenToUse.Bounds.Height; int ScreenW = screenToUse.Bounds.Width;
             int total = Panel_List.Count;
 
-            foreach (Panel panel in Panel_List)
+            int rows = 0;
+            int cols = 0;
+
+            if (AttemptedCols != 0 & AttemptedRows != 0)
             {
-                List<TextBox> text_input = panel.Controls.OfType<TextBox>().ToList();
-
-                int ScreenH = screenToUse.Bounds.Height;
-                int ScreenW = screenToUse.Bounds.Width;
-
-                string text_in = text_input[0].Text;
-
-                ChromiumWebBrowser browser = new ChromiumWebBrowser(text_input[0].Text);
-                browser.Dock = DockStyle.None;
-
-                Label Address = new Label();
-                Address.Text = text_input[0].Text;
-                Address.Height = 20;
-                Address.Font = new Font(Address.Font.FontFamily, 14);
-                Address.ForeColor = Color.White;
-                Address.Tag = browser;
-                Address.Cursor = Cursors.Hand;
-                Address.AutoSize = true;
-
-                Address.Click += new EventHandler(Label_Clicked);
-
-                if (Panel_List.Count > 1)
+                cols = AttemptedCols;
+                rows = AttemptedRows;
+            } else
+            {
+                if(ScreenH < ScreenW)
                 {
-                    decimal notRoundTotal = (decimal)total / 2;
-
-                    if (ScreenH < ScreenW)
-                    {
-                        ScreenH /= 2;
-                        browser.ClientSize = new Size(Convert.ToInt32(ScreenW / Math.Ceiling(notRoundTotal)), ScreenH - 20);
-                        browser.Location = new Point(Convert.ToInt32(ScreenW / Math.Ceiling(notRoundTotal)) * cols, ScreenH * rows + 20);
-
-                        Address.Location = new Point(Convert.ToInt32(ScreenW / Math.Ceiling(notRoundTotal)) * cols, ScreenH * rows);
-                        Address.Width = ScreenW / (total / 2);
-
-                        cols++;
-                        if (cols == Math.Ceiling(notRoundTotal))
-                        {
-                            cols = 0;
-                            rows++;
-                        }
-                    }
-                    else
-                    {
-                        browser.ClientSize = new Size(ScreenW / 2, Convert.ToInt32(ScreenH / Math.Ceiling(notRoundTotal)) - 20);
-                        browser.Location = new Point(ScreenW * cols / 2, Convert.ToInt32(ScreenH / Math.Ceiling(notRoundTotal)) * rows + 20);
-
-                        Address.Location = new Point(ScreenW * cols / 2, Convert.ToInt32(ScreenH / Math.Ceiling(notRoundTotal)) * rows);
-                        Address.Width = ScreenW / 2;
-
-                        cols++;
-                        if (cols == 2)
-                        {
-                            cols = 0;
-                            rows++;
-                        }
-                    }
-
-                    form3.Controls.Add(Address);
-                    form3.Controls.Add(browser);
-                }
-                else
+                    rows = 2;
+                    cols = Convert.ToInt32(Math.Ceiling((decimal) total / 2));
+                } else
                 {
-                    browser.ClientSize = new Size(ScreenW, ScreenH);
-                    form3.Controls.Add(browser);
+                    cols = 2;
+                    rows = Convert.ToInt32(Math.Ceiling((decimal)total / 2));
                 }
+            }
+
+            try
+            {
+                for (int i = 0; i < rows; i++)
+                {
+                    for (int j = 0; j < cols; j++)
+                    {
+                        Panel panel = Panel_List[count];
+
+                        List<TextBox> text_input = panel.Controls.OfType<TextBox>().ToList();
+                        string text_in = text_input[0].Text;
+
+                        ChromiumWebBrowser browser = new ChromiumWebBrowser(text_input[0].Text);
+                        browser.Dock = DockStyle.None;
+
+                        browser.Size = new Size(ScreenW / cols, (ScreenH / rows) - 20);
+                        browser.Location = new Point((ScreenW / cols) * j, (ScreenH / rows) * i + 20);                        
+
+                        #region Address
+                        Label Address = new Label();
+                        Address.Text = text_input[0].Text;
+                        Address.Height = 20;
+                        Address.Font = new Font(Address.Font.FontFamily, 14);
+                        Address.ForeColor = Color.White;
+                        Address.Tag = browser;
+                        Address.Cursor = Cursors.Hand;
+                        Address.AutoSize = true;
+
+                        Address.Click += new EventHandler(Label_Clicked);
+                        #endregion
+                        Address.Location = new Point((ScreenW / cols) * j, (ScreenH / rows) * i);
+
+                        form3.Controls.Add(Address);
+                        form3.Controls.Add(browser);
+
+                        count++;
+                    }
+                }
+            } catch(Exception)
+            {
             }
 
             form3.Show();
@@ -184,7 +179,7 @@ namespace Dispatcher_Tool_Rework
         {
             ToolStripItem item = e.ClickedItem;
 
-            if(item.Text == "Exit")
+            if (item.Text == "Exit")
             {
                 form3.Close();
             }
@@ -198,11 +193,11 @@ namespace Dispatcher_Tool_Rework
         void addMultipleToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Form2 Add_Form = new Form2();
-            Add_Form.SettingsUpdated += new Form2.SettingsUpdateHandler(addMultipleToolStripMenuItem_ButtonClicked);
+            Add_Form.SettingsUpdated += new Form2.AddMultipleUpdateHandler(addMultipleToolStripMenuItem_ButtonClicked);
             Add_Form.Show();
         }
 
-        void addMultipleToolStripMenuItem_ButtonClicked(object sender, SettingsUpdateArgs Panels)
+        void addMultipleToolStripMenuItem_ButtonClicked(object sender, AddMultipleUpdateArgs Panels)
         {
             for (int i = 0; i < Panels.Quantity; i++)
             {
@@ -349,6 +344,19 @@ namespace Dispatcher_Tool_Rework
         {
             Cef.Shutdown();
             this.Dispose();
+        }
+
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Settings Settings_Form = new Settings(AttemptedRows, AttemptedCols);
+            Settings_Form.SettingsUpdated += new Settings.SettingsUpdateHandler(NewSettings);
+            Settings_Form.Show();
+        }
+
+        void NewSettings(object sender, SettingsUpdateArgs e)
+        {
+            AttemptedRows = e.Rows;
+            AttemptedCols = e.Cols;
         }
     }
 }
