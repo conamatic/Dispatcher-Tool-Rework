@@ -88,6 +88,7 @@ namespace Dispatcher_Tool_Rework
             Screen screenToUse = Screen.AllScreens[screen];
 
             form3.FormBorderStyle = FormBorderStyle.None;
+            form3.Icon = Properties.Resources.DispatchViewer;
             form3.WindowState = FormWindowState.Maximized;
             form3.BackColor = Color.Black;
             form3.FormClosed += new FormClosedEventHandler(Form_Closing);
@@ -95,6 +96,12 @@ namespace Dispatcher_Tool_Rework
             form3.StartPosition = FormStartPosition.Manual;
             form3.Location = screenToUse.Bounds.Location;
 
+            ContextMenuStrip menu = new ContextMenuStrip();
+            menu.Items.Add("Exit");
+
+            menu.ItemClicked += Menu_ItemClicked;
+
+            form3.ContextMenuStrip = menu;
 
             int cols = 0;
             int rows = 0;
@@ -171,6 +178,16 @@ namespace Dispatcher_Tool_Rework
 
             form3.Show();
             formOpen = true;
+        }
+
+        private void Menu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            ToolStripItem item = e.ClickedItem;
+
+            if(item.Text == "Exit")
+            {
+                form3.Close();
+            }
         }
 
         void addToolStripMenuItem_Click(object sender, EventArgs e)
