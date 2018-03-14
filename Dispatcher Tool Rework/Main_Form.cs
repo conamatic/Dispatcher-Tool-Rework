@@ -240,7 +240,6 @@ namespace Dispatcher_Tool_Rework
                         All_Lines.RemoveAt(0);
                     }
 
-
                     foreach (string line in All_Lines)
                     {
                         New_Panel(line, lock_input);
@@ -257,7 +256,7 @@ namespace Dispatcher_Tool_Rework
         {
             if (Panel_List.Count != 0)
             {
-                DialogResult ExportResult = MessageBox.Show("Lock this configuration?", "Error", MessageBoxButtons.YesNoCancel);
+                DialogResult ExportResult = MessageBox.Show("Lock this configuration from edits within this application?", "Error", MessageBoxButtons.YesNoCancel);
                 if (ExportResult != DialogResult.Cancel)
                 {
                     if (Export_Config_Dialog.ShowDialog() == DialogResult.OK)
@@ -316,7 +315,17 @@ namespace Dispatcher_Tool_Rework
             }
             else
             {
-                MessageBox.Show("Only one window supported");
+                DialogResult result = MessageBox.Show("Only one window supported - do you want to close it?", "Window already open", MessageBoxButtons.OKCancel);
+                if (result == DialogResult.OK)
+                {
+                    form3.Close();
+
+                    ToolStripItem screen_item = (ToolStripItem)sender;
+                    OpenNewScreen(Convert.ToInt32(screen_item.Tag));
+
+                    MenuStrip strip = screen_item.GetCurrentParent() as MenuStrip;
+                }
+
             }
         }
 
