@@ -3,12 +3,12 @@ using System.Windows.Forms;
 
 namespace Dispatcher_Tool_Rework
 {
-    public partial class Form2 : Form
+    public partial class Add_Form : Form
     {
         public delegate void AddMultipleUpdateHandler(object sender, AddMultipleUpdateArgs e);
         public event AddMultipleUpdateHandler SettingsUpdated;
 
-        public Form2()
+        public Add_Form()
         {
             InitializeComponent();
         }

@@ -1,6 +1,6 @@
 ﻿namespace Dispatcher_Tool_Rework
 {
-    partial class Form2
+    partial class Add_Form
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form2));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Add_Form));
             this.Template_Input = new System.Windows.Forms.TextBox();
             this.Quantity_Input = new System.Windows.Forms.TextBox();
             this.templateLabel = new System.Windows.Forms.Label();
@@ -51,7 +51,7 @@
             this.Quantity_Input.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
             this.Quantity_Input.Location = new System.Drawing.Point(87, 38);
             this.Quantity_Input.Name = "Quantity_Input";
-            this.Quantity_Input.Size = new System.Drawing.Size(232, 21);
+            this.Quantity_Input.Size = new System.Drawing.Size(83, 21);
             this.Quantity_Input.TabIndex = 1;
             // 
             // templateLabel
@@ -94,7 +94,7 @@
             this.Cancel_Button.UseVisualStyleBackColor = true;
             this.Cancel_Button.Click += new System.EventHandler(this.Cancel_Button_Click);
             // 
-            // Form2
+            // Add_Form
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
             this.BackColor = System.Drawing.SystemColors.Window;
@@ -107,7 +107,7 @@
             this.Controls.Add(this.Template_Input);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "Form2";
+            this.Name = "Add_Form";
             this.ResumeLayout(false);
             this.PerformLayout();
 

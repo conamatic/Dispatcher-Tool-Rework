@@ -192,8 +192,8 @@ namespace Dispatcher_Tool_Rework
 
         void addMultipleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Form2 Add_Form = new Form2();
-            Add_Form.SettingsUpdated += new Form2.AddMultipleUpdateHandler(addMultipleToolStripMenuItem_ButtonClicked);
+            Add_Form Add_Form = new Add_Form();
+            Add_Form.SettingsUpdated += new Add_Form.AddMultipleUpdateHandler(addMultipleToolStripMenuItem_ButtonClicked);
             Add_Form.Show();
         }
 
