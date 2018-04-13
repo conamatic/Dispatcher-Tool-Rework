@@ -53,6 +53,7 @@
             this.Quantity_Input.Name = "Quantity_Input";
             this.Quantity_Input.Size = new System.Drawing.Size(83, 21);
             this.Quantity_Input.TabIndex = 1;
+            this.Quantity_Input.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Quantity_Input_KeyDown);
             // 
             // templateLabel
             // 

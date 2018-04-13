@@ -20,6 +20,19 @@ namespace Dispatcher_Tool_Rework
 
         private void Save_Button_Click(object sender, EventArgs e)
         {
+            SaveAndDispose();
+        }
+
+        private void Quantity_Input_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Enter)
+            {
+                SaveAndDispose();
+            }
+        }
+
+        private void SaveAndDispose()
+        {
             try
             {
                 int newQuantity = Convert.ToInt32(Quantity_Input.Text);
@@ -28,7 +41,6 @@ namespace Dispatcher_Tool_Rework
                 AddMultipleUpdateArgs args = new AddMultipleUpdateArgs(newQuantity, newTemplate);
                 SettingsUpdated(this, args);
                 this.Dispose();
-
             }
             catch (Exception AddNewException)
             {

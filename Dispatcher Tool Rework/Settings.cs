@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Dispatcher_Tool_Rework
@@ -29,10 +22,23 @@ namespace Dispatcher_Tool_Rework
 
         private void Save_Button_Click(object sender, EventArgs e)
         {
+            SaveAndDispose();
+        }
+
+        private void Input_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Enter)
+            {
+                SaveAndDispose();
+            }
+        }
+
+        private void SaveAndDispose()
+        {
             try
             {
-                int newRows = (String.IsNullOrEmpty(Rows_Input.Text)) ? 0 : Convert.ToInt32(Rows_Input.Text);
-                int newCols = (String.IsNullOrEmpty(Columns_Input.Text)) ? 0 : Convert.ToInt32(Columns_Input.Text);
+                int newRows = (String.IsNullOrEmpty(Rows_Input.Text)) ? 1 : Convert.ToInt32(Rows_Input.Text);
+                int newCols = (String.IsNullOrEmpty(Columns_Input.Text)) ? 1 : Convert.ToInt32(Columns_Input.Text);
 
                 SettingsUpdateArgs args = new SettingsUpdateArgs(newRows, newCols);
                 SettingsUpdated(this, args);

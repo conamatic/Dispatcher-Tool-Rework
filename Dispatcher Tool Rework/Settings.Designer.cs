@@ -64,6 +64,7 @@
             this.Columns_Input.Name = "Columns_Input";
             this.Columns_Input.Size = new System.Drawing.Size(232, 21);
             this.Columns_Input.TabIndex = 7;
+            this.Columns_Input.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Input_KeyDown);
             // 
             // Rows_Input
             // 
@@ -73,6 +74,7 @@
             this.Rows_Input.Name = "Rows_Input";
             this.Rows_Input.Size = new System.Drawing.Size(232, 21);
             this.Rows_Input.TabIndex = 6;
+            this.Rows_Input.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Input_KeyDown);
             // 
             // label1
             // 
