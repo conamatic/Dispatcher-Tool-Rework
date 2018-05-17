@@ -12,6 +12,8 @@ namespace Dispatcher_Tool_Rework
     public partial class Main_Form : Form
     {
         List<Panel> Panel_List = new List<Panel>();
+        List<ChromiumWebBrowser> BrowserList = new List<ChromiumWebBrowser>();
+
         bool formOpen = false;
         int counter = 1;
         Form form3;
@@ -38,10 +40,20 @@ namespace Dispatcher_Tool_Rework
         {
             ToolStripItem item = e.ClickedItem;
 
-            if (item.Text == "Exit")
+            switch (item.Text)
             {
-                form3.Close();
+                case "Exit":
+                    form3.Close();
+                    break;
+
+                case "Refresh All":
+                    foreach (ChromiumWebBrowser browser in BrowserList)
+                    {
+                        browser.Reload();
+                    }
+                    break;
             }
+
         }
 
         void addToolStripMenuItem_Click(object sender, EventArgs e)
@@ -98,7 +110,7 @@ namespace Dispatcher_Tool_Rework
         {
             if (Panel_List.Count != 0)
             {
-                DialogResult ExportResult = MessageBox.Show("Lock this configuration from edits within this application?", "Error", MessageBoxButtons.YesNoCancel);
+                DialogResult ExportResult = MessageBox.Show("Lock this configuration?", "Lock?", MessageBoxButtons.YesNoCancel);
                 if (ExportResult != DialogResult.Cancel)
                 {
                     if (Export_Config_Dialog.ShowDialog() == DialogResult.OK)
@@ -276,9 +288,8 @@ namespace Dispatcher_Tool_Rework
 
             ContextMenuStrip menu = new ContextMenuStrip();
             menu.Items.Add("Exit");
-
+            menu.Items.Add("Refresh All");
             menu.ItemClicked += Menu_ItemClicked;
-
             form3.ContextMenuStrip = menu;
 
             int count = 0;
@@ -338,6 +349,7 @@ namespace Dispatcher_Tool_Rework
 
                         form3.Controls.Add(Address);
                         form3.Controls.Add(browser);
+                        BrowserList.Add(browser);
 
                         count++;
                     }

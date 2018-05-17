@@ -129,9 +129,15 @@
             this.runToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
             this.runToolStripMenuItem.Text = "Run";
             // 
+            // Export_Config_Dialog
+            // 
+            this.Export_Config_Dialog.DefaultExt = "cfg";
+            this.Export_Config_Dialog.Filter = "CFG Files|*.cfg|All Files|*.*";
+            // 
             // Import_File_Dialog
             // 
-            this.Import_File_Dialog.FileName = "openFileDialog1";
+            this.Import_File_Dialog.DefaultExt = "cfg";
+            this.Import_File_Dialog.Filter = "CFG Files|*.cfg|All Files|*.*";
             // 
             // Main_Form
             // 
