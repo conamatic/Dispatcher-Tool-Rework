@@ -52,7 +52,7 @@
             this.runToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(462, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(479, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -132,19 +132,19 @@
             // Export_Config_Dialog
             // 
             this.Export_Config_Dialog.DefaultExt = "cfg";
-            this.Export_Config_Dialog.Filter = "CFG Files|*.cfg|All Files|*.*";
+            this.Export_Config_Dialog.Filter = "JSON Files|*.json|All Files|*.*";
             // 
             // Import_File_Dialog
             // 
             this.Import_File_Dialog.DefaultExt = "cfg";
-            this.Import_File_Dialog.Filter = "CFG Files|*.cfg|All Files|*.*";
+            this.Import_File_Dialog.Filter = "JSON Files|*.json|All Files|*.*";
             // 
             // Main_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(462, 496);
+            this.ClientSize = new System.Drawing.Size(479, 496);
             this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
