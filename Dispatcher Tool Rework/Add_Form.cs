@@ -37,8 +37,9 @@ namespace Dispatcher_Tool_Rework
             {
                 int newQuantity = Convert.ToInt32(Quantity_Input.Text);
                 string newTemplate = Template_Input.Text;
+                string newLabel = Label_Input.Text;
 
-                AddMultipleUpdateArgs args = new AddMultipleUpdateArgs(newQuantity, newTemplate);
+                AddMultipleUpdateArgs args = new AddMultipleUpdateArgs(newQuantity, newTemplate, newLabel);
                 SettingsUpdated(this, args);
                 this.Dispose();
             }
@@ -53,11 +54,13 @@ namespace Dispatcher_Tool_Rework
     {
         private int mQuantity;
         private string mTemplate;
+        private string mLabel;
 
-        public AddMultipleUpdateArgs(int NewQuantity, string NewTemplate)
+        public AddMultipleUpdateArgs(int NewQuantity, string NewTemplate, string NewLabel)
         {
             this.mQuantity = NewQuantity;
             this.mTemplate = NewTemplate;
+            this.mLabel = NewLabel;
         }
 
         public int Quantity
@@ -72,6 +75,13 @@ namespace Dispatcher_Tool_Rework
             get
             {
                 return mTemplate;
+            }
+        }
+        public string Label
+        {
+            get
+            {
+                return mLabel;
             }
         }
     }

@@ -52,7 +52,10 @@ namespace Dispatcher_Tool_Rework
                 case "Refresh All":
                     foreach (ChromiumWebBrowser browser in BrowserList)
                     {
-                        browser.Reload();
+                        try
+                        {
+                            browser.Reload();
+                        } catch (Exception) { }
                     }
                     break;
             }
@@ -62,7 +65,7 @@ namespace Dispatcher_Tool_Rework
         void addToolStripMenuItem_Click(object sender, EventArgs e)
         {
             UrlPanel urlPanel = new UrlPanel();
-            urlPanel.panel = New_Panel(null, false);
+            urlPanel.panel = New_Panel(null, false, null);
             Panel_List.Add(urlPanel);
         }
 
@@ -81,7 +84,8 @@ namespace Dispatcher_Tool_Rework
                 {
                     Url = Panels.Template,
                     InputLock = false,
-                    panel = New_Panel(Panels.Template, false)
+                    Label = Panels.Label,
+                    panel = New_Panel(Panels.Template, false, Panels.Label)
                 };
                 Panel_List.Add(urlPanel);
             }
@@ -113,7 +117,7 @@ namespace Dispatcher_Tool_Rework
 
                     foreach (UrlPanel urlPanel in temp_PanelList)
                     {
-                        urlPanel.panel = New_Panel(urlPanel.Url, urlPanel.InputLock);
+                        urlPanel.panel = New_Panel(urlPanel.Url, urlPanel.InputLock, urlPanel.Label);
                         Panel_List.Add(urlPanel);
                     }
 
@@ -149,6 +153,7 @@ namespace Dispatcher_Tool_Rework
                                 foreach (UrlPanel urlPanel in Panel_List)
                                 {
                                     urlPanel.Url = urlPanel.panel.Controls.OfType<TextBox>().ToList()[0].Text;
+                                    urlPanel.Label = urlPanel.panel.Controls.OfType<TextBox>().ToList()[1].Text;
                                 }
 
                                 writer.WriteLine(JsonConvert.SerializeObject(Panel_List, Formatting.Indented));
@@ -207,7 +212,7 @@ namespace Dispatcher_Tool_Rework
         void Label_Clicked(object sender, EventArgs e)
         {
             Label label = (Label)sender;
-            ChromiumWebBrowser browser = (ChromiumWebBrowser)label.Tag;
+            ChromiumWebBrowser browser = (ChromiumWebBrowser) label.Tag;
 
             browser.Reload();
         }
@@ -240,7 +245,7 @@ namespace Dispatcher_Tool_Rework
         #endregion
 
 
-        Panel New_Panel(string template, bool locked)
+        Panel New_Panel(string template, bool locked, string label)
         {
             Panel panel = new Panel()
             {
@@ -264,21 +269,32 @@ namespace Dispatcher_Tool_Rework
             panel.Controls.Add(Counter_Label);
 
 
-            TextBox text_input = new TextBox();
-            text_input.Left = 40;
-            text_input.Top = 0;
-            text_input.Width = 350;
-            text_input.Font = new Font(text_input.Font.FontFamily, 15);
+            TextBox url_input = new TextBox();
+            url_input.Left = 40;
+            url_input.Top = 0;
+            url_input.Width = 350;
+            url_input.Font = new Font(url_input.Font.FontFamily, 15);
 
-            text_input.Text = template;
-            text_input.Name = "Text_Input";
+            url_input.Text = template;
+            url_input.Name = "Text_Input";
 
             if (locked)
             {
-                text_input.ReadOnly = true;
+                url_input.ReadOnly = true;
             }
 
-            panel.Controls.Add(text_input);
+            panel.Controls.Add(url_input);
+
+            TextBox label_input = new TextBox();
+            label_input.Left = 400;
+            label_input.Top = 0;
+            label_input.Width = 200;
+            label_input.Font = new Font(label_input.Font.FontFamily, 15);
+
+            label_input.Text = label;
+            label_input.Name = "Label_Input";
+
+            panel.Controls.Add(label_input);
 
             ContextMenuStrip menu = new ContextMenuStrip();
             ToolStripMenuItem menuRemove = new ToolStripMenuItem("Remove");
@@ -294,6 +310,12 @@ namespace Dispatcher_Tool_Rework
 
         void OpenNewScreen(int screen)
         {
+            foreach(UrlPanel urlPanel in Panel_List)
+            {
+                urlPanel.Url = urlPanel.panel.Controls.OfType<TextBox>().ToList()[0].Text;
+                urlPanel.Label = urlPanel.panel.Controls.OfType<TextBox>().ToList()[1].Text;
+            }
+
             form3 = new Form();
             form3.Controls.Clear();
             Screen screenToUse = Screen.AllScreens[screen];
@@ -345,12 +367,9 @@ namespace Dispatcher_Tool_Rework
                 {
                     for (int j = 0; j < cols; j++)
                     {
-                        Panel panel = Panel_List[count].panel;
+                        UrlPanel urlPanel = Panel_List[count];
 
-                        List<TextBox> text_input = panel.Controls.OfType<TextBox>().ToList();
-                        string text_in = text_input[0].Text;
-
-                        ChromiumWebBrowser browser = new ChromiumWebBrowser(text_input[0].Text);
+                        ChromiumWebBrowser browser = new ChromiumWebBrowser(urlPanel.Url);
                         browser.Dock = DockStyle.None;
 
                         browser.Size = new Size(ScreenW / cols, (ScreenH / rows) - 20);
@@ -358,7 +377,7 @@ namespace Dispatcher_Tool_Rework
 
                         #region Address
                         Label Address = new Label();
-                        Address.Text = text_input[0].Text;
+                        Address.Text = (urlPanel.Label != String.Empty ) ? urlPanel.Label : urlPanel.Url;
                         Address.Height = 20;
                         Address.Font = new Font(Address.Font.FontFamily, 14);
                         Address.ForeColor = Color.White;
@@ -413,6 +432,7 @@ namespace Dispatcher_Tool_Rework
     class UrlPanel
     {
         public string Url { get; set; }
+        public string Label { get; set; }
         public bool InputLock { get; set; }
 
         [JsonIgnore]

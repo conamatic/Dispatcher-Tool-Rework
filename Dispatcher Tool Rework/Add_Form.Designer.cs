@@ -35,6 +35,8 @@
             this.Quantity = new System.Windows.Forms.Label();
             this.Save_Button = new System.Windows.Forms.Button();
             this.Cancel_Button = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.Label_Input = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // Template_Input
@@ -49,10 +51,10 @@
             // Quantity_Input
             // 
             this.Quantity_Input.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.Quantity_Input.Location = new System.Drawing.Point(87, 38);
+            this.Quantity_Input.Location = new System.Drawing.Point(87, 65);
             this.Quantity_Input.Name = "Quantity_Input";
             this.Quantity_Input.Size = new System.Drawing.Size(83, 21);
-            this.Quantity_Input.TabIndex = 1;
+            this.Quantity_Input.TabIndex = 2;
             this.Quantity_Input.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Quantity_Input_KeyDown);
             // 
             // templateLabel
@@ -69,7 +71,7 @@
             // 
             this.Quantity.AutoSize = true;
             this.Quantity.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.Quantity.Location = new System.Drawing.Point(15, 41);
+            this.Quantity.Location = new System.Drawing.Point(15, 68);
             this.Quantity.Name = "Quantity";
             this.Quantity.Size = new System.Drawing.Size(51, 15);
             this.Quantity.TabIndex = 3;
@@ -77,7 +79,7 @@
             // 
             // Save_Button
             // 
-            this.Save_Button.Location = new System.Drawing.Point(244, 65);
+            this.Save_Button.Location = new System.Drawing.Point(244, 92);
             this.Save_Button.Name = "Save_Button";
             this.Save_Button.Size = new System.Drawing.Size(75, 23);
             this.Save_Button.TabIndex = 4;
@@ -87,7 +89,7 @@
             // 
             // Cancel_Button
             // 
-            this.Cancel_Button.Location = new System.Drawing.Point(142, 65);
+            this.Cancel_Button.Location = new System.Drawing.Point(142, 92);
             this.Cancel_Button.Name = "Cancel_Button";
             this.Cancel_Button.Size = new System.Drawing.Size(75, 23);
             this.Cancel_Button.TabIndex = 5;
@@ -95,11 +97,32 @@
             this.Cancel_Button.UseVisualStyleBackColor = true;
             this.Cancel_Button.Click += new System.EventHandler(this.Cancel_Button_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.label1.Location = new System.Drawing.Point(15, 41);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(38, 15);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "Label";
+            // 
+            // Label_Input
+            // 
+            this.Label_Input.BackColor = System.Drawing.SystemColors.Window;
+            this.Label_Input.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.Label_Input.Location = new System.Drawing.Point(87, 38);
+            this.Label_Input.Name = "Label_Input";
+            this.Label_Input.Size = new System.Drawing.Size(232, 21);
+            this.Label_Input.TabIndex = 1;
+            // 
             // Add_Form
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(354, 108);
+            this.ClientSize = new System.Drawing.Size(354, 150);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.Label_Input);
             this.Controls.Add(this.Cancel_Button);
             this.Controls.Add(this.Save_Button);
             this.Controls.Add(this.Quantity);
@@ -122,5 +145,7 @@
         private System.Windows.Forms.Label Quantity;
         private System.Windows.Forms.Button Save_Button;
         private System.Windows.Forms.Button Cancel_Button;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox Label_Input;
     }
 }
