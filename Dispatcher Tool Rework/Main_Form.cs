@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.OleDb;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -55,7 +57,8 @@ namespace Dispatcher_Tool_Rework
                         try
                         {
                             browser.Reload();
-                        } catch (Exception) { }
+                        }
+                        catch (Exception) { }
                     }
                     break;
             }
@@ -212,7 +215,7 @@ namespace Dispatcher_Tool_Rework
         void Label_Clicked(object sender, EventArgs e)
         {
             Label label = (Label)sender;
-            ChromiumWebBrowser browser = (ChromiumWebBrowser) label.Tag;
+            ChromiumWebBrowser browser = (ChromiumWebBrowser)label.Tag;
 
             browser.Reload();
         }
@@ -310,7 +313,7 @@ namespace Dispatcher_Tool_Rework
 
         void OpenNewScreen(int screen)
         {
-            foreach(UrlPanel urlPanel in Panel_List)
+            foreach (UrlPanel urlPanel in Panel_List)
             {
                 urlPanel.Url = urlPanel.panel.Controls.OfType<TextBox>().ToList()[0].Text;
                 urlPanel.Label = urlPanel.panel.Controls.OfType<TextBox>().ToList()[1].Text;
@@ -377,7 +380,7 @@ namespace Dispatcher_Tool_Rework
 
                         #region Address
                         Label Address = new Label();
-                        Address.Text = (urlPanel.Label != String.Empty ) ? urlPanel.Label : urlPanel.Url;
+                        Address.Text = (urlPanel.Label != String.Empty) ? urlPanel.Label : urlPanel.Url;
                         Address.Height = 20;
                         Address.Font = new Font(Address.Font.FontFamily, 14);
                         Address.ForeColor = Color.White;
@@ -427,6 +430,46 @@ namespace Dispatcher_Tool_Rework
         {
             AttemptedRows = e.Rows;
             AttemptedCols = e.Cols;
+        }
+
+        void GetFromSQL(string udlPath)
+        {
+            OleDbConnection conn = new OleDbConnection("File name = " + udlPath);
+            try
+            {
+                conn.Open();
+                if(conn.State == ConnectionState.Open)
+                {
+                    OleDbCommand query = new OleDbCommand("SELECT DEVICE_NM FROM XDEVICE WHERE DEVICE_TYPE = 'Diade';", conn);
+                    OleDbDataAdapter adapter = new OleDbDataAdapter(query);
+                    DataTable dataSet = new DataTable();
+                    adapter.Fill(dataSet);
+                    conn.Close();
+
+                    foreach(DataRow row in dataSet.Rows)
+                    {
+                        UrlPanel urlPanel = new UrlPanel();
+                        urlPanel.panel = New_Panel("http://127.0.0.1/device_" + row["DEVICE_NM"].ToString() + "/", false, row["DEVICE_NM"].ToString());
+                        Panel_List.Add(urlPanel);
+                    }
+                }
+            }
+            catch (Exception SQLException)
+            {
+                MessageBox.Show(SQLException.ToString());
+            }
+        }
+
+        private void importFromSQLToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.Filter = "UDL Files|*.udl";
+            DialogResult result = fileDialog.ShowDialog();
+
+            if(result == DialogResult.OK)
+            {
+                GetFromSQL(fileDialog.FileName);
+            }
         }
     }
     class UrlPanel
