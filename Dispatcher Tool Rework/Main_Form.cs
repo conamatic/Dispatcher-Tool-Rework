@@ -247,7 +247,6 @@ namespace Dispatcher_Tool_Rework
 
         #endregion
 
-
         Panel New_Panel(string template, bool locked, string label)
         {
             Panel panel = new Panel()
@@ -468,6 +467,22 @@ namespace Dispatcher_Tool_Rework
 
             if(result == DialogResult.OK)
             {
+                if (Panel_List.Count > 0)
+                {
+                    DialogResult Overwrite = MessageBox.Show("Remove existing panels first?", "Remove existing panels?", MessageBoxButtons.YesNoCancel);
+
+                    if (Overwrite == DialogResult.Yes)
+                    {
+                        this.Controls.OfType<Panel>().ToList().ForEach(panel => this.Controls.Remove(panel));
+                        counter = 1;
+                        Panel_List.Clear();
+                    }
+                    else if (Overwrite == DialogResult.Cancel)
+                    {
+                        return;
+                    }
+                }
+
                 GetFromSQL(fileDialog.FileName);
             }
         }
