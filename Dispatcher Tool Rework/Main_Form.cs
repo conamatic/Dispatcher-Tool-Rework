@@ -16,15 +16,12 @@ namespace Dispatcher_Tool_Rework
     public partial class Main_Form : Form
     {
         //List<Panel> Panel_List = new List<Panel>();
-        List<UrlPanel> Panel_List = new List<UrlPanel>();
+        UrlWithSettings PanelInfo = new UrlWithSettings();
         List<ChromiumWebBrowser> BrowserList = new List<ChromiumWebBrowser>();
 
         bool formOpen = false;
         int counter = 1;
         Form form3;
-
-        int AttemptedRows = 0;
-        int AttemptedCols = 0;
 
         public Main_Form()
         {
@@ -37,6 +34,8 @@ namespace Dispatcher_Tool_Rework
                 ScreenItem.Tag = i;
                 ScreenItem.Click += new EventHandler(ScreenMenuClick);
             }
+
+            PanelInfo.Urls = new List<UrlPanel>();
         }
 
         #region Event Handlers
@@ -69,7 +68,7 @@ namespace Dispatcher_Tool_Rework
         {
             UrlPanel urlPanel = new UrlPanel();
             urlPanel.panel = New_Panel(null, false, null);
-            Panel_List.Add(urlPanel);
+            PanelInfo.Urls.Add(urlPanel);
         }
 
         void addMultipleToolStripMenuItem_Click(object sender, EventArgs e)
@@ -90,7 +89,7 @@ namespace Dispatcher_Tool_Rework
                     Label = Panels.Label,
                     panel = New_Panel(Panels.Template, false, Panels.Label)
                 };
-                Panel_List.Add(urlPanel);
+                PanelInfo.Urls.Add(urlPanel);
             }
         }
 
@@ -98,7 +97,7 @@ namespace Dispatcher_Tool_Rework
         {
             if (Import_File_Dialog.ShowDialog() == DialogResult.OK)
             {
-                if (Panel_List.Count > 0)
+                if (PanelInfo.Urls.Count > 0)
                 {
                     DialogResult Overwrite = MessageBox.Show("Remove existing panels first?", "Remove existing panels?", MessageBoxButtons.YesNoCancel);
 
@@ -106,7 +105,7 @@ namespace Dispatcher_Tool_Rework
                     {
                         this.Controls.OfType<Panel>().ToList().ForEach(panel => this.Controls.Remove(panel));
                         counter = 1;
-                        Panel_List.Clear();
+                        PanelInfo.Urls.Clear();
                     }
                     else if (Overwrite == DialogResult.Cancel)
                     {
@@ -116,13 +115,16 @@ namespace Dispatcher_Tool_Rework
 
                 try
                 {
-                    List<UrlPanel> temp_PanelList = JsonConvert.DeserializeObject<List<UrlPanel>>(File.ReadAllText(Import_File_Dialog.FileName));
+                    UrlWithSettings temp_PanelInfo = JsonConvert.DeserializeObject<UrlWithSettings>(File.ReadAllText(Import_File_Dialog.FileName));
 
-                    foreach (UrlPanel urlPanel in temp_PanelList)
+                    foreach (UrlPanel urlPanel in temp_PanelInfo.Urls)
                     {
                         urlPanel.panel = New_Panel(urlPanel.Url, urlPanel.InputLock, urlPanel.Label);
-                        Panel_List.Add(urlPanel);
+                        PanelInfo.Urls.Add(urlPanel);
                     }
+
+                    PanelInfo.AttemptedRows = temp_PanelInfo.AttemptedRows;
+                    PanelInfo.AttemptedCols = temp_PanelInfo.AttemptedCols;
 
                 }
                 catch (Exception FileImportEx)
@@ -134,7 +136,7 @@ namespace Dispatcher_Tool_Rework
 
         void exportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Panel_List.Count != 0)
+            if (PanelInfo.Urls.Count != 0)
             {
                 DialogResult ExportResult = MessageBox.Show("Lock this configuration?", "Lock?", MessageBoxButtons.YesNoCancel);
                 if (ExportResult != DialogResult.Cancel)
@@ -147,19 +149,19 @@ namespace Dispatcher_Tool_Rework
                             {
                                 if (ExportResult == DialogResult.Yes)
                                 {
-                                    foreach (UrlPanel urlPanel in Panel_List)
+                                    foreach (UrlPanel urlPanel in PanelInfo.Urls)
                                     {
                                         urlPanel.InputLock = true;
                                     }
                                 }
 
-                                foreach (UrlPanel urlPanel in Panel_List)
+                                foreach (UrlPanel urlPanel in PanelInfo.Urls)
                                 {
                                     urlPanel.Url = urlPanel.panel.Controls.OfType<TextBox>().ToList()[0].Text;
                                     urlPanel.Label = urlPanel.panel.Controls.OfType<TextBox>().ToList()[1].Text;
                                 }
 
-                                writer.WriteLine(JsonConvert.SerializeObject(Panel_List, Formatting.Indented));
+                                writer.WriteLine(JsonConvert.SerializeObject(PanelInfo, Formatting.Indented));
 
                             }
                         }
@@ -178,12 +180,12 @@ namespace Dispatcher_Tool_Rework
 
         void clearToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            foreach (UrlPanel urlPanel in Panel_List)
+            foreach (UrlPanel urlPanel in PanelInfo.Urls)
             {
                 this.Controls.Remove(urlPanel.panel);
             }
             counter = 0;
-            Panel_List.Clear();
+            PanelInfo.Urls.Clear();
         }
 
         void ScreenMenuClick(object sender, EventArgs e)
@@ -240,7 +242,7 @@ namespace Dispatcher_Tool_Rework
 
         void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Settings Settings_Form = new Settings(AttemptedRows, AttemptedCols);
+            Settings Settings_Form = new Settings(PanelInfo.AttemptedRows, PanelInfo.AttemptedCols);
             Settings_Form.SettingsUpdated += new Settings.SettingsUpdateHandler(NewSettings);
             Settings_Form.Show();
         }
@@ -312,7 +314,7 @@ namespace Dispatcher_Tool_Rework
 
         void OpenNewScreen(int screen)
         {
-            foreach (UrlPanel urlPanel in Panel_List)
+            foreach (UrlPanel urlPanel in PanelInfo.Urls)
             {
                 urlPanel.Url = urlPanel.panel.Controls.OfType<TextBox>().ToList()[0].Text;
                 urlPanel.Label = urlPanel.panel.Controls.OfType<TextBox>().ToList()[1].Text;
@@ -339,15 +341,15 @@ namespace Dispatcher_Tool_Rework
 
             int count = 0;
             int ScreenH = screenToUse.Bounds.Height; int ScreenW = screenToUse.Bounds.Width;
-            int total = Panel_List.Count;
+            int total = PanelInfo.Urls.Count;
 
             int rows = 0;
             int cols = 0;
 
-            if (AttemptedCols != 0 & AttemptedRows != 0)
+            if (PanelInfo.AttemptedCols != 0 & PanelInfo.AttemptedRows != 0)
             {
-                cols = AttemptedCols;
-                rows = AttemptedRows;
+                cols = PanelInfo.AttemptedCols;
+                rows = PanelInfo.AttemptedRows;
             }
             else
             {
@@ -369,7 +371,7 @@ namespace Dispatcher_Tool_Rework
                 {
                     for (int j = 0; j < cols; j++)
                     {
-                        UrlPanel urlPanel = Panel_List[count];
+                        UrlPanel urlPanel = PanelInfo.Urls[count];
 
                         ChromiumWebBrowser browser = new ChromiumWebBrowser(urlPanel.Url);
                         browser.Dock = DockStyle.None;
@@ -413,10 +415,10 @@ namespace Dispatcher_Tool_Rework
             ContextMenuStrip menu = (ContextMenuStrip)menuItem.GetCurrentParent();
             Panel panel = (Panel)menu.SourceControl;
             this.Controls.Remove(panel);
-            Panel_List.RemoveAll(p => p.panel == panel);
+            PanelInfo.Urls.RemoveAll(p => p.panel == panel);
             counter--;
 
-            foreach (UrlPanel proceeding in Panel_List.Where(p => Convert.ToInt32(p.panel.Tag) > Convert.ToInt32(panel.Tag)))
+            foreach (UrlPanel proceeding in PanelInfo.Urls.Where(p => Convert.ToInt32(p.panel.Tag) > Convert.ToInt32(panel.Tag)))
             {
                 List<Label> label = proceeding.panel.Controls.OfType<Label>().ToList();
                 label[0].Text = (Convert.ToInt32(label[0].Text) - 1).ToString();
@@ -427,8 +429,8 @@ namespace Dispatcher_Tool_Rework
 
         void NewSettings(object sender, SettingsUpdateArgs e)
         {
-            AttemptedRows = e.Rows;
-            AttemptedCols = e.Cols;
+            PanelInfo.AttemptedRows = e.Rows;
+            PanelInfo.AttemptedCols = e.Cols;
         }
 
         void GetFromSQL(string udlPath)
@@ -437,7 +439,7 @@ namespace Dispatcher_Tool_Rework
             try
             {
                 conn.Open();
-                if(conn.State == ConnectionState.Open)
+                if (conn.State == ConnectionState.Open)
                 {
                     OleDbCommand query = new OleDbCommand("SELECT DEVICE_NM FROM XDEVICE WHERE DEVICE_TYPE = 'Diade';", conn);
                     OleDbDataAdapter adapter = new OleDbDataAdapter(query);
@@ -445,11 +447,11 @@ namespace Dispatcher_Tool_Rework
                     adapter.Fill(dataSet);
                     conn.Close();
 
-                    foreach(DataRow row in dataSet.Rows)
+                    foreach (DataRow row in dataSet.Rows)
                     {
                         UrlPanel urlPanel = new UrlPanel();
                         urlPanel.panel = New_Panel("http://127.0.0.1/device_" + row["DEVICE_NM"].ToString() + "/", false, row["DEVICE_NM"].ToString());
-                        Panel_List.Add(urlPanel);
+                        PanelInfo.Urls.Add(urlPanel);
                     }
                 }
             }
@@ -465,9 +467,9 @@ namespace Dispatcher_Tool_Rework
             fileDialog.Filter = "UDL Files|*.udl";
             DialogResult result = fileDialog.ShowDialog();
 
-            if(result == DialogResult.OK)
+            if (result == DialogResult.OK)
             {
-                if (Panel_List.Count > 0)
+                if (PanelInfo.Urls.Count > 0)
                 {
                     DialogResult Overwrite = MessageBox.Show("Remove existing panels first?", "Remove existing panels?", MessageBoxButtons.YesNoCancel);
 
@@ -475,7 +477,7 @@ namespace Dispatcher_Tool_Rework
                     {
                         this.Controls.OfType<Panel>().ToList().ForEach(panel => this.Controls.Remove(panel));
                         counter = 1;
-                        Panel_List.Clear();
+                        PanelInfo.Urls.Clear();
                     }
                     else if (Overwrite == DialogResult.Cancel)
                     {
@@ -487,6 +489,15 @@ namespace Dispatcher_Tool_Rework
             }
         }
     }
+
+    class UrlWithSettings
+    {
+        public int AttemptedRows { get; set; } = 0;
+        public int AttemptedCols { get; set; } = 0;
+
+        public List<UrlPanel> Urls { get; set; }
+    }
+
     class UrlPanel
     {
         public string Url { get; set; }
